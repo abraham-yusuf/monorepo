@@ -3,13 +3,6 @@ version: 2.1
 orbs:
   win: circleci/windows@2.2.0
 
-# machine:
-#   pre:
-#     - mkdir ~/.cache/yarn
-
-# dependencies:
-#   cache_directories:
-#     - ~/.cache/yarn
 jobs:
   build:
     executor: win/default
@@ -27,13 +20,19 @@ jobs:
           command: |
             npm i -g yarn
 
+      - run: 
+          name: Set Yarn cache dir
+          command: |
+            yarn config set cache-folder ~/.cache/yarn
+
       - restore_cache:
           name: Restore Yarn Package Cache
           keys:
             - yarn-packages-{{ checksum "yarn.lock" }}
+      
       - run:
           name: Install Dependencies
-          command: yarn install --nonInteractive --frozen-lockfile --cache-folder ~/.cache/yarn
+          command: yarn install --nonInteractive --frozen-lockfile
    
       - save_cache:
           name: Save Yarn Package Cache
