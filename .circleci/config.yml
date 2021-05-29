@@ -9,6 +9,11 @@ jobs:
     steps:
       - checkout
 
+      - run: 
+          name: Check docker compose version
+          command: |
+            docker-compose version
+
       - run:
           name: Setup Node.js
           command: |
